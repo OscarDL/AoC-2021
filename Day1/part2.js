@@ -1,20 +1,7 @@
 const measurements = require('./measurements.json');
 
 
-const part1 = (measurements) => {
-  let increasedDepth = 0;
-
-  for (const index in measurements) {
-    if (index > 0 && measurements[index] > measurements[index - 1]) {
-      increasedDepth += 1;
-    }
-  }
-
-  console.log(`The depth increased ${increasedDepth} times.`);
-};
-
-
-const part2 = (measurements) => {
+const getThreeDepth = (measurements) => {
   let increasedDepth = 0;
 
   for (const index in measurements) {
@@ -33,5 +20,4 @@ const part2 = (measurements) => {
 };
 
 
-part1(measurements);
-part2(measurements);
+getThreeDepth(measurements);
