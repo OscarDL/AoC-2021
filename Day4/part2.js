@@ -36,12 +36,24 @@ const splitNumbers = (string, pattern) => (
   string.split(pattern).filter(n => n !== '').map(Number)
 );
 
+const spliceOrReturnBoard = (boards, board, loopedNumbers) => {
+  if (boards.length === 1) {
+    return {
+      losingBoard: boards[0],
+      finalNumber: loopedNumbers.pop()
+    };
+  } else {
+    boards.splice(boards.findIndex(b => b === board), 1);
+    return null;
+  }
+};
+
 const isArrayNegative = (array) => (
   array.filter(n => n >= 0).length === 0
 );
 
 
-const getWinningBoard = (lines, numbers) => {
+const getLosingBoard = (lines, numbers) => {
   let loopedNumbers = [];
   const boards = getNewBoards();
 
@@ -60,24 +72,18 @@ const getWinningBoard = (lines, numbers) => {
           }
         });
 
-        // Check if any line is negative to find the winning board
+        // Check if any line is negative and remove the board
         if (isArrayNegative(line)) {
-          return {
-            boards,
-            winningBoard: board,
-            finalNumber: loopedNumbers.pop()
-          };
+          const returnedValue = spliceOrReturnBoard(boards, board, loopedNumbers);
+          if (returnedValue) return returnedValue;
         }
       }
 
-      // Check if any column is negative to find the winning board
+      // Check if any column is negative and remove the board
       let column = board.map(line => line[0]);
       if (isArrayNegative(column)) {
-        return {
-          boards,
-          winningBoard: board,
-          finalNumber: loopedNumbers.pop()
-        };
+        const returnedValue = spliceOrReturnBoard(boards, board, loopedNumbers);
+        if (returnedValue) return returnedValue;
       }
     }
   }
@@ -88,13 +94,13 @@ const getWinningBoard = (lines, numbers) => {
 const lines = readFile('input.txt').replace(/[\r]/g, '').split('\n');
 const numbersToDraw = splitNumbers(lines[0], ',');
 
-const { boards, winningBoard, finalNumber } = getWinningBoard(lines, numbersToDraw);
-
-// concatenating arrays to an empty array merges them all into a single one
-const positiveNumbers = [].concat(...winningBoard.map(line => line.filter(n => n >= 0)));
+const { losingBoard, finalNumber } = getLosingBoard(lines, numbersToDraw);
+const positiveNumbers = losingBoard.map(line => line.filter(n => n >= 0));
 
 const result = positiveNumbers.flat().reduce((a, b) => a + b, 0) * finalNumber;
-const boardNumber = boards.findIndex(board => board === winningBoard) + 1;
+
+const foundLosingBoard = losingBoard.map(line => line.map(Math.abs));
+const boardNumber = getNewBoards().findIndex(board => String(board) === String(foundLosingBoard)) + 1;
 
 console.log('The final result is: ' + result);
-console.log('The winning board is: ' + boardNumber);
+console.log('The losing board is: ' + boardNumber);
