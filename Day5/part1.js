@@ -40,7 +40,7 @@ const board = getNewBoard(max_lines, max_columns);
 
 
 for (const vent of vents) {
-  let [[x1, y1], [x2, y2]] = vent.map(xy => xy.split(',').map(num => +num));
+  let [[x1, y1], [x2, y2]] = vent.map(xy => xy.split(',').map(Number));
 
   // Only consider numbers where both x or both y are equal
   if (x1 !== x2 && y1 !== y2) continue;
