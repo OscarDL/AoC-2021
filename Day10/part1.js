@@ -12,6 +12,14 @@ const readFile = (file) => {
   }
 };
 
+
+const match_closing = {
+  '(': ')',
+  '[': ']',
+  '{': '}',
+  '<': '>'
+};
+
 const getSyntaxErrors = (lines) => {
   const totalErrors = {
     ')': 0,
@@ -52,14 +60,6 @@ const countTotalErrors = (char, occurence) => {
 
     case '>': return 25137 * occurence;
   };
-};
-
-
-const match_closing = {
-  '(': ')',
-  '[': ']',
-  '{': '}',
-  '<': '>'
 };
 
 
